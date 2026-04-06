@@ -1,0 +1,35 @@
+2026/04/06 22:00:23 order listening on :8080
+2026/04/06 22:00:30 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:30 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:31 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:31 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:32 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:32 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:32 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:33 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:33 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:33 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:33 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:33 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:34 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:34 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:34 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:34 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:35 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:35 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:35 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57553
+2026/04/06 22:00:35 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:36 service=order-server method=GET path=/metrics status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:00:36 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57553
+2026/04/06 22:06:56 outbound method=POST url=http://localhost:8081/pay
+2026/04/06 22:06:56 outbound method=POST url=http://localhost:8081/pay status=200 OK
+2026/04/06 22:06:56 Creat order success
+2026/04/06 22:06:56 service=order-server method=POST path=/order status=200 duration=25ms remote=[::1]:60570
+2026/04/06 22:06:57 outbound method=POST url=http://localhost:8081/pay
+2026/04/06 22:06:57 outbound method=POST url=http://localhost:8081/pay status=200 OK
+2026/04/06 22:06:57 Creat order success
+2026/04/06 22:06:57 service=order-server method=POST path=/order status=200 duration=1ms remote=[::1]:60570
+2026/04/06 22:06:58 service=order-server method=GET path=/metrics status=200 duration=1ms remote=[::1]:57494
+2026/04/06 22:06:58 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57494
+2026/04/06 22:07:07 service=order-server method=GET path=/metrics status=200 duration=0s remote=[::1]:57494
+2026/04/06 22:07:07 service=order-server method=GET path=/favicon.ico status=200 duration=0s remote=[::1]:57494

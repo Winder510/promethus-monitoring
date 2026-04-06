@@ -1,0 +1,198 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: order
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.order.replicas }}
+  selector:
+    matchLabels:
+      app: order
+      component: order
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: order
+        component: order
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: order
+          image: "{{ .Values.order.image.repository }}:{{ .Values.order.image.tag }}"
+          imagePullPolicy: {{ .Values.order.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "{{ .Values.order.port }}"
+            - name: PAYMENT_URL
+              value: http://payment:{{ .Values.payment.port }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector:4318
+          ports:
+            - containerPort: {{ .Values.order.port }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.order.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.order.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: order
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  selector:
+    app: order
+    component: order
+    release: {{ .Release.Name }}
+  type: {{ .Values.order.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.order.port }}
+      targetPort: {{ .Values.order.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: payment
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.payment.replicas }}
+  selector:
+    matchLabels:
+      app: payment
+      component: payment
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: payment
+        component: payment
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: payment
+          image: "{{ .Values.payment.image.repository }}:{{ .Values.payment.image.tag }}"
+          imagePullPolicy: {{ .Values.payment.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "{{ .Values.payment.port }}"
+            - name: STOCK_URL
+              value: http://stock:{{ .Values.stock.port }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector:4318
+          ports:
+            - containerPort: {{ .Values.payment.port }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.payment.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.payment.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: payment
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  selector:
+    app: payment
+    component: payment
+    release: {{ .Release.Name }}
+  type: {{ .Values.payment.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.payment.port }}
+      targetPort: {{ .Values.payment.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: stock
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.stock.replicas }}
+  selector:
+    matchLabels:
+      app: stock
+      component: stock
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: stock
+        component: stock
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: stock
+          image: "{{ .Values.stock.image.repository }}:{{ .Values.stock.image.tag }}"
+          imagePullPolicy: {{ .Values.stock.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "{{ .Values.stock.port }}"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector:4318
+          ports:
+            - containerPort: {{ .Values.stock.port }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.stock.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.stock.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: stock
+{{ include "microservices.labels" . | indent 4 }}
+spec:
+  selector:
+    app: stock
+    component: stock
+    release: {{ .Release.Name }}
+  type: {{ .Values.stock.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.stock.port }}
+      targetPort: {{ .Values.stock.port }}

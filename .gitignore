@@ -1,0 +1,13 @@
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+vendor/
+.idea/
+.vscode/
+.DS_Store
+helm/base/charts/

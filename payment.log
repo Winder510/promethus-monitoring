@@ -1,0 +1,7 @@
+2026/04/06 22:00:23 payment listening on :8081
+2026/04/06 22:06:56 outbound method=POST url=http://localhost:8082/reserve
+2026/04/06 22:06:56 outbound method=POST url=http://localhost:8082/reserve status=200 OK
+2026/04/06 22:06:56 service=payment-server method=POST path=/pay status=200 duration=12ms remote=[::1]:60571
+2026/04/06 22:06:57 outbound method=POST url=http://localhost:8082/reserve
+2026/04/06 22:06:57 outbound method=POST url=http://localhost:8082/reserve status=200 OK
+2026/04/06 22:06:57 service=payment-server method=POST path=/pay status=200 duration=1ms remote=[::1]:60571

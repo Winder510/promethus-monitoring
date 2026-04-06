@@ -1,0 +1,8 @@
+# Ignore files used only during development
+
+.git/
+.vscode/
+.idea/
+_.swp
+_.tmp
+README.md

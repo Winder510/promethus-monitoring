@@ -1,0 +1,31 @@
+namespace:
+  create: false
+  name: microservices
+
+order:
+  replicas: 1
+  service:
+    type: LoadBalancer
+  image:
+    repository: winder510/order
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 8080
+payment:
+  replicas: 1
+  service:
+    type: LoadBalancer
+  image:
+    repository: winder510/payment
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 8081
+stock:
+  replicas: 1
+  service:
+    type: LoadBalancer
+  image:
+    repository: winder510/stock
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 8082

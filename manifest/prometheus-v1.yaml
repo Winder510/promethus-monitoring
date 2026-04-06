@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 30s
+    rule_files:
+      - /etc/prometheus/rules/*.yaml
+    scrape_configs:
+      - job_name: order
+        static_configs:
+          - targets: ["order.microservices.svc.cluster.local:8080"]
+      - job_name: payment
+        static_configs:
+          - targets: ["payment.microservices.svc.cluster.local:8081"]
+      - job_name: stock
+        static_configs:
+          - targets: ["stock.microservices.svc.cluster.local:8082"]
+      - job_name: otel-collector
+        static_configs:
+          - targets: ["otel-collector.microservices.svc.cluster.local:8888"]
+  alerts.yaml: |
+    groups:
+      - name: microservices
+        rules:
+          - alert: ServiceDown
+            expr: up{job=~"order|payment|stock"} == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "A service is down"
+              description: "One of the microservices is not being scraped by Prometheus."
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.54.1
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+            - "--storage.tsdb.retention.time=7d"
+            - "--web.enable-lifecycle"
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: rules
+              mountPath: /etc/prometheus/rules
+            - name: data
+              mountPath: /prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+            items:
+              - key: prometheus.yml
+                path: prometheus.yml
+        - name: rules
+          configMap:
+            name: prometheus-config
+            items:
+              - key: alerts.yaml
+                path: alerts.yaml
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: http
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-loadbalancer
+  namespace: monitoring
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: http
+      port: 9090
+      targetPort: 9090
+  type: LoadBalancer

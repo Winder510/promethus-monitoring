@@ -1,0 +1,24 @@
+namespace:
+  create: false
+  name: microservices
+
+prometheus:
+  image: prom/prometheus:v2.54.1
+  retention: 7d
+
+alertmanager:
+  image: prom/alertmanager:v0.28.0
+
+grafana:
+  image: grafana/grafana:11.4.0
+  adminUser: admin
+  adminPassword: admin
+
+otelCollector:
+  image: otel/opentelemetry-collector-contrib:0.118.0
+
+clickhouse:
+  image: clickhouse/clickhouse-server:24.12
+
+serviceMonitor:
+  interval: 15s
