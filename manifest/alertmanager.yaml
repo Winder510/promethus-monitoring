@@ -12,11 +12,11 @@ data:
     receivers:
     - name: default
       email_configs:
-        - to: "you@gmail.com"
+        - to: "phong.hoangg@endava.com"
           from: "alertmanager@gmail.com"
           smarthost: "smtp.gmail.com:587"
-          auth_username: "your-email"
-          auth_password: "your-password"
+          auth_username: "hoangphonghp04@gmail.com"
+          auth_password: "${SMTP_PASSWORD}"
 ---
 apiVersion: apps/v1
 kind: Deployment
