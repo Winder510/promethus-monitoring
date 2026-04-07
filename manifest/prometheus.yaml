@@ -12,6 +12,8 @@ data:
       alertmanagers:
         - static_configs:
             - targets: ["alertmanager:9093"]
+    rule_files:
+      - /etc/prometheus/rules/*.yaml
     scrape_configs:
       - job_name: kubernetes-endpoints  #Monitor server in containers
         kubernetes_sd_configs:  
@@ -40,8 +42,8 @@ data:
       - name: microservices
         rules:
           - alert: ServiceDown
-            expr: up{job=~"order"} == 1
-            for: 1s
+            expr: vector(1) == 1
+            for: 10s
             labels:
               severity: critical
             annotations:

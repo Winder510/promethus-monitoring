@@ -10,13 +10,13 @@ data:
     route:
       receiver: default
     receivers:
-    - name: default
-      email_configs:
-        - to: "phong.hoangg@endava.com"
-          from: "alertmanager@gmail.com"
-          smarthost: "smtp.gmail.com:587"
-          auth_username: "hoangphonghp04@gmail.com"
-          auth_password: "${SMTP_PASSWORD}"
+      - name: default
+        email_configs:
+          - to: "fongg.service@gmail.com"
+            from: "hoangphonghp04@gmail.com"
+            smarthost: "smtp.gmail.com:587"
+            auth_username: "hoangphonghp04@gmail.com"
+            auth_password_file: /etc/alertmanager/secrets/SMTP_PASSWORD
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +44,9 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/alertmanager
+            - name: auth
+              mountPath: /etc/alertmanager/secrets
+              readOnly: true
             - name: data
               mountPath: /alertmanager
       volumes:
@@ -53,6 +56,12 @@ spec:
             items:
               - key: alertmanager.yml
                 path: alertmanager.yml
+        - name: auth
+          secret:
+            secretName: alertmanager-auth
+            items:
+              - key: SMTP_PASSWORD
+                path: SMTP_PASSWORD
         - name: data
           emptyDir: {}
 ---

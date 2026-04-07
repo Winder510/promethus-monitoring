@@ -6,30 +6,44 @@ metadata:
 data:
   prometheus.yml: |
     global:
-      scrape_interval: {{ .Values.serviceMonitor.interval }}
-      evaluation_interval: {{ .Values.serviceMonitor.interval }}
+      scrape_interval: {{ .Values.prometheus.scrapeInterval }}
+      evaluation_interval: {{ .Values.prometheus.evaluationInterval }}
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets: ["{{ .Values.prometheus.alertingTarget }}"]
     rule_files:
       - /etc/prometheus/rules/*.yaml
     scrape_configs:
-      - job_name: order
-        static_configs:
-          - targets: ["order:8080"]
-      - job_name: payment
-        static_configs:
-          - targets: ["payment:8081"]
-      - job_name: stock
-        static_configs:
-          - targets: ["stock:8082"]
-      - job_name: otel-collector
-        static_configs:
-          - targets: ["otel-collector:8888"]
+      - job_name: {{ .Values.prometheus.alertJobName }}  #Monitor server in containers
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: {{ .Values.prometheus.namespaceLabel }}
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: job
   alerts.yaml: |
     groups:
       - name: microservices
         rules:
           - alert: ServiceDown
-            expr: up{job=~"order|payment|stock"} == 0
-            for: 1m
+            expr: {{ .Values.prometheus.alertExpr }}
+            for: {{ .Values.prometheus.alertRuleFor }}
             labels:
               severity: critical
             annotations:
@@ -51,6 +65,7 @@ spec:
       labels:
         app: prometheus
     spec:
+      serviceAccountName: { { .Values.prometheus.serviceAccountName } }
       containers:
         - name: prometheus
           image: { { .Values.prometheus.image } }
@@ -87,7 +102,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus
+  name: { { .Values.prometheus.clusterIPServiceName } }
   namespace: { { .Release.Namespace } }
 spec:
   selector:
@@ -96,3 +111,17 @@ spec:
     - name: http
       port: 9090
       targetPort: 9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: { { .Values.prometheus.loadBalancerServiceName } }
+  namespace: { { .Release.Namespace } }
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: http
+      port: 9090
+      targetPort: 9090
+  type: LoadBalancer

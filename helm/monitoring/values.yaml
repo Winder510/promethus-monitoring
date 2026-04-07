@@ -5,20 +5,25 @@ namespace:
 prometheus:
   image: prom/prometheus:v2.54.1
   retention: 7d
+  scrapeInterval: 15s
+  evaluationInterval: 15s
+  serviceAccountName: prometheus
+  clusterIPServiceName: prometheus-clusterip
+  loadBalancerServiceName: prometheus-loadbalancer
+  namespaceLabel: microservices
+  alertingTarget: alertmanager:9093
+  alertJobName: kubernetes-endpoints
+  alertRuleFor: 10s
+  alertExpr: vector(1) == 1
 
 alertmanager:
   image: prom/alertmanager:v0.28.0
+  smtpPassword: changeme
 
 grafana:
   image: grafana/grafana:11.4.0
   adminUser: admin
   adminPassword: admin
-
-otelCollector:
-  image: otel/opentelemetry-collector-contrib:0.118.0
-
-clickhouse:
-  image: clickhouse/clickhouse-server:24.12
 
 serviceMonitor:
   interval: 15s

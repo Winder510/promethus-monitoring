@@ -33,8 +33,6 @@ spec:
               value: "{{ .Values.order.port }}"
             - name: PAYMENT_URL
               value: http://payment:{{ .Values.payment.port }}
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: http://otel-collector:4318
           ports:
             - containerPort: {{ .Values.order.port }}
           readinessProbe:
@@ -108,8 +106,6 @@ spec:
               value: "{{ .Values.payment.port }}"
             - name: STOCK_URL
               value: http://stock:{{ .Values.stock.port }}
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: http://otel-collector:4318
           ports:
             - containerPort: {{ .Values.payment.port }}
           readinessProbe:
@@ -181,8 +177,6 @@ spec:
           env:
             - name: PORT
               value: "{{ .Values.stock.port }}"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: http://otel-collector:4318
           ports:
             - containerPort: {{ .Values.stock.port }}
           readinessProbe:

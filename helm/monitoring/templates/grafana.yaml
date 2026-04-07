@@ -34,9 +34,9 @@ spec:
           image: { { .Values.grafana.image } }
           env:
             - name: GF_SECURITY_ADMIN_USER
-              value: { { .Values.grafana.adminUser } }
+              value: { { .Values.grafana.adminUser | quote } }
             - name: GF_SECURITY_ADMIN_PASSWORD
-              value: { { .Values.grafana.adminPassword } }
+              value: { { .Values.grafana.adminPassword | quote } }
           ports:
             - containerPort: 3000
           volumeMounts:
