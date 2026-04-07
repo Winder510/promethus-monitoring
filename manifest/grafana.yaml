@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasources
-  namespace: { { .Release.Namespace } }
+  namespace: monitoring
 data:
   datasources.yaml: |
     apiVersion: 1
@@ -10,7 +10,7 @@ data:
       - name: Prometheus
         type: prometheus
         access: proxy
-        url: http://prometheus:9090
+        url: http://prometheus-clusterip:9090
         isDefault: true
         editable: true
 ---
@@ -18,7 +18,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
-  namespace: { { .Release.Namespace } }
+  namespace: monitoring
 spec:
   replicas: 1
   selector:
@@ -31,12 +31,18 @@ spec:
     spec:
       containers:
         - name: grafana
-          image: { { .Values.grafana.image } }
+          image: grafana/grafana:11.4.0
           env:
             - name: GF_SECURITY_ADMIN_USER
-              value: { { .Values.grafana.adminUser } }
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-secret
+                  key: admin-user
             - name: GF_SECURITY_ADMIN_PASSWORD
-              value: { { .Values.grafana.adminPassword } }
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-admin-secret
+                  key: admin-password
           ports:
             - containerPort: 3000
           volumeMounts:
@@ -58,7 +64,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: { { .Release.Namespace } }
+  namespace: monitoring
 spec:
   selector:
     app: grafana
@@ -66,3 +72,4 @@ spec:
     - name: http
       port: 3000
       targetPort: 3000
+  type: LoadBalancer

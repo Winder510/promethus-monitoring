@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: clickhouse
-  namespace: { { .Release.Namespace } }
+  namespace: monitoring
 spec:
   replicas: 1
   selector:
@@ -15,22 +15,23 @@ spec:
     spec:
       containers:
         - name: clickhouse
-          image: { { .Values.clickhouse.image } }
+          image: clickhouse/clickhouse-server:24.12
           ports:
             - containerPort: 8123
             - containerPort: 9000
           volumeMounts:
-            - name: clickhouse-data
+            - name: ch-storage
               mountPath: /var/lib/clickhouse
       volumes:
-        - name: clickhouse-data
-          emptyDir: {}
+        - name: ch-storage
+          persistentVolumeClaim:
+            claimName: clickhouse-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: clickhouse
-  namespace: { { .Release.Namespace } }
+  namespace: monitoring
 spec:
   selector:
     app: clickhouse

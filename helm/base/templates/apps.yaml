@@ -19,6 +19,10 @@ spec:
         app: order
         component: order
         release: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.order.port }}"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
         - name: order
@@ -54,6 +58,10 @@ metadata:
   labels:
     app: order
 {{ include "microservices.labels" . | indent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.order.port }}"
+    prometheus.io/path: "/metrics"
 spec:
   selector:
     app: order
@@ -86,6 +94,10 @@ spec:
         app: payment
         component: payment
         release: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.payment.port }}"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
         - name: payment
@@ -121,6 +133,10 @@ metadata:
   labels:
     app: payment
 {{ include "microservices.labels" . | indent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.payment.port }}"
+    prometheus.io/path: "/metrics"
 spec:
   selector:
     app: payment
@@ -153,6 +169,10 @@ spec:
         app: stock
         component: stock
         release: {{ .Release.Name }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.stock.port }}"
+        prometheus.io/path: "/metrics"
     spec:
       containers:
         - name: stock
@@ -186,6 +206,10 @@ metadata:
   labels:
     app: stock
 {{ include "microservices.labels" . | indent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.stock.port }}"
+    prometheus.io/path: "/metrics"
 spec:
   selector:
     app: stock
