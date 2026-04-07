@@ -8,10 +8,14 @@ data:
     global:
       scrape_interval: 15s
       evaluation_interval: 15s
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets: ["alertmanager:9093"]
     scrape_configs:
-      - job_name: kubernetes-endpoints
-        kubernetes_sd_configs:
-          - role: endpoints
+      - job_name: kubernetes-endpoints  #Monitor server in containers
+        kubernetes_sd_configs:  
+          - role: endpoints 
         relabel_configs:
           - source_labels: [__meta_kubernetes_namespace]
             action: keep
@@ -37,7 +41,7 @@ data:
         rules:
           - alert: ServiceDown
             expr: up{job=~"order|payment|stock"} == 0
-            for: 1m
+            for: 1s
             labels:
               severity: critical
             annotations:

@@ -10,7 +10,13 @@ data:
     route:
       receiver: default
     receivers:
-      - name: default
+    - name: default
+      email_configs:
+        - to: "you@gmail.com"
+          from: "alertmanager@gmail.com"
+          smarthost: "smtp.gmail.com:587"
+          auth_username: "your-email"
+          auth_password: "your-password"
 ---
 apiVersion: apps/v1
 kind: Deployment
