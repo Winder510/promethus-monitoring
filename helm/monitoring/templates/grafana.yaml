@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasources
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 data:
   datasources.yaml: |
     apiVersion: 1
@@ -18,7 +18,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -31,12 +31,12 @@ spec:
     spec:
       containers:
         - name: grafana
-          image: { { .Values.grafana.image } }
+          image: {{ .Values.grafana.image }}
           env:
             - name: GF_SECURITY_ADMIN_USER
-              value: { { .Values.grafana.adminUser | quote } }
+              value: {{ .Values.grafana.adminUser | quote }}
             - name: GF_SECURITY_ADMIN_PASSWORD
-              value: { { .Values.grafana.adminPassword | quote } }
+              value: {{ .Values.grafana.adminPassword | quote }}
           ports:
             - containerPort: 3000
           volumeMounts:
@@ -58,7 +58,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     app: grafana

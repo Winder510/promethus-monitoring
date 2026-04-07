@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alertmanager-config
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 data:
   alertmanager.yml: |
     global:
@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alertmanager
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: alertmanager
-          image: { { .Values.alertmanager.image } }
+          image: {{ .Values.alertmanager.image }}
           args:
             - "--config.file=/etc/alertmanager/alertmanager.yml"
             - "--storage.path=/alertmanager"
@@ -54,7 +54,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alertmanager
-  namespace: { { .Release.Namespace } }
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     app: alertmanager
