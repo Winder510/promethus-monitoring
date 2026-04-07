@@ -40,7 +40,7 @@ data:
       - name: microservices
         rules:
           - alert: ServiceDown
-            expr: up{job=~"order|payment|stock"} == 0
+            expr: up{job=~"order"} == 1
             for: 1s
             labels:
               severity: critical
