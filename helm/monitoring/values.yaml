@@ -7,7 +7,9 @@ prometheus:
   retention: 7d
   scrapeInterval: 15s
   evaluationInterval: 15s
-  serviceAccountName: prometheus
+  serviceAccountName: monitoring-prometheus
+  clusterRoleName: monitoring-prometheus
+  clusterRoleBindingName: monitoring-prometheus
   clusterIPServiceName: prometheus-clusterip
   loadBalancerServiceName: prometheus-loadbalancer
   namespaceLabel: microservices
@@ -18,12 +20,20 @@ prometheus:
 
 alertmanager:
   image: prom/alertmanager:v0.28.0
-  smtpPassword: changeme
+  emailTo: fongg.service@gmail.com
+  emailFrom: hoangphonghp04@gmail.com
+  smarthost: smtp.gmail.com:587
+  authUsername: hoangphonghp04@gmail.com
+  smtpPassword: "wuvy aace zxua nmnq"
+  clusterIPServiceName: alertmanager
+  loadBalancerServiceName: alertmanager-loadbalancer
 
 grafana:
   image: grafana/grafana:11.4.0
   adminUser: admin
   adminPassword: admin
+  clusterIPServiceName: grafana
+  loadBalancerServiceName: grafana-loadbalancer
 
 serviceMonitor:
   interval: 15s
