@@ -124,7 +124,7 @@ Nếu render ổn thì mới cài:
 
 ```bash
 helm upgrade --install microservices-app ./helm/base -n microservices --create-namespace
-helm upgrade --install microservices-monitoring ./helm/monitoring -n microservices --create-namespace
+helm upgrade --install microservices-monitoring ./helm/monitoring -n monitoring --create-namespace
 ```
 
 #### 8. Validate chart
